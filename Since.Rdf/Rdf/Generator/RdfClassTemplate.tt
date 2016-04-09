@@ -1,0 +1,48 @@
+﻿<#@ template language="C#" linePragmas="false" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Reflection" #>
+using Since.Rdf;
+using Since.Rdf.ObjectModel;
+
+namespace <#= this.GetNamespace() #>
+{
+<#
+	foreach (INode classNode in this.GetClasses())
+	{
+		string className = this.GetClassName(classNode);
+		string classIri  = (classNode as IriNode)?.Iri.ToString();
+		string baseIri   = this.GetBaseIri(classNode);
+
+		string baseIriText = String.Empty;
+		if (!String.IsNullOrWhiteSpace(baseIri))
+			baseIriText = $", BaseIri =\"{baseIri}\"";
+#>	
+    [RdfClass(Iri = "<#= classIri #>"<#= baseIriText #>)]
+	public partial class <#= className #> : RdfObject
+	{
+        public <#= className #>(INode node, IEdgeSet edgeSet = null)
+			: base(node, edgeSet)
+        { }
+
+<#
+		foreach (INode propertyNode in this.GetProperties(classNode))
+		{
+			string propertyName = this.GetPropertyName(propertyNode);
+			string propertyType = this.GetPropertyType(propertyNode);
+			string propertyIri  = (propertyNode as IriNode)?.Iri.ToString();
+#>
+        [RdfProperty(Iri = "<#= propertyIri #>")]
+        public <#= propertyType #> <#= propertyName #> { get { return this.GetProperty<<#= propertyType #> >(); } set { this.SetProperty(value); } }
+
+<#
+		}
+#>
+	}
+
+<#
+	}
+#>
+}
