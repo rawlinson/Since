@@ -12,6 +12,7 @@ namespace Since.Rdf
         : ICollection<Edge>, IEdgeQueryable
     {
         /// <summary>
+        /// Gets or sets the capacity of the set.
         /// </summary>
         int Capacity { get; set; }
 

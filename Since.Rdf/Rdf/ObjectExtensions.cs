@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using Windows.ApplicationModel.Background;
 using Since.Net;
 using System.Diagnostics.Contracts;
 

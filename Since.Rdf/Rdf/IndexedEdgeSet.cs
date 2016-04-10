@@ -11,10 +11,10 @@ namespace Since.Rdf
     /// </summary>
     public class IndexedEdgeSet : IEdgeSet
     {
-        private readonly MultiValueDictionary<IndexKey, Edge> _index = new MultiValueDictionary<IndexKey, Edge>();
-        private readonly IEnumerable<IndexCoverage> _indexes;
         private readonly Collections.HashSet<Edge> _edges = new Collections.HashSet<Edge>();
-        
+        private readonly IEnumerable<IndexCoverage> _indexes;
+        private readonly MultiValueDictionary<IndexKey, Edge> _index = new MultiValueDictionary<IndexKey, Edge>();
+
         /// <summary>
         /// </summary>
         /// <param name="indexCoverage"></param>
@@ -31,17 +31,20 @@ namespace Since.Rdf
         public IndexCoverage IndexCoverage { get; }
 
         /// <summary>
+        /// Gets the number of edges in the set.
         /// </summary>
+        /// <value>The number of edges in the set.</value>
         public int Count
             => _edges.Count;
 
         /// <summary>
+        /// Gets whether the set is readonly or not.
         /// </summary>
+        /// <value><see langword="true"/> if the set is read only; otherwise, <see langword="false"/></value>
         public bool IsReadOnly
             => _edges.IsReadOnly;
 
-        /// <summary>
-        /// </summary>
+        /// <inheritdoc />
         public int Capacity
         {
             get { return _edges.Capacity; }
