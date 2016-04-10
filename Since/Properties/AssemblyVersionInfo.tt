@@ -1,0 +1,11 @@
+﻿<#
+
+	this.Version = "0.1.0." + Revision;
+	this.Branch = GitBranch;
+	this.Pre = "";
+	this.Post = "dev." + Revision;
+	this.Build = GitCommitId;
+
+	this.IsPublished = false;
+#>
+<#@ include file="Avers.ttinclude" #>

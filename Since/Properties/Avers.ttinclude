@@ -1,0 +1,191 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core.dll" #>
+<#@ assembly name="EnvDTE" #>
+<#@ assembly name="LibGit2Sharp.dll" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="LibGit2Sharp" #>
+/*
+	Generated from <#= File #>
+*/
+using System.Reflection;
+
+[assembly: AssemblyVersion("<#= this.AssemblyVersion #>")]
+[assembly: AssemblyFileVersion("<#= this.AssemblyFileVersion #>")]
+[assembly: AssemblyInformationalVersion("<#= this.AssemblyInformationalVersion #>")]
+<#+
+		string Version { get; set; } = String.Empty;
+		string Branch { get; set; } = String.Empty;
+		string Pre { get; set; } = String.Empty;
+		string Post { get; set; } = String.Empty;
+		string Build { get; set; } = String.Empty;
+
+        private LibGit2Sharp.Repository OpenGitRepo()
+        {					               
+            string repoRoot = Dte.ActiveDocument.FullName;
+            while (!Directory.Exists(Path.Combine(repoRoot, ".git")))
+            {
+                repoRoot = Path.GetDirectoryName(repoRoot);
+                if (repoRoot == null)
+                {
+                    return null;
+                }
+            }
+
+            return new LibGit2Sharp.Repository(repoRoot);
+        }
+
+
+		bool IsPublished;
+
+		string part(string v, int count)
+		{
+			int index = 0-1;
+			while (count-- > 0)
+				index = v.IndexOf('.', index + 1);
+			return v.Substring(0, index);
+		}
+
+		EnvDTE.DTE _dte = null;
+		EnvDTE.DTE Dte
+		{
+			get
+			{
+				if (_dte == null)
+					_dte = (EnvDTE.DTE)((IServiceProvider)this.Host).GetService(typeof(EnvDTE.DTE));
+				return _dte;
+			}
+		}
+
+		string File
+			=> Dte.ActiveDocument.FullName;
+
+		Repository _git = null;
+		Repository Git
+		{
+			get
+			{
+				if (_git == null)
+					_git = OpenGitRepo();
+				return _git;
+			}
+		}
+
+		bool GitIsModified
+		{
+			get {
+				return Git.RetrieveStatus((StatusOptions)null).IsDirty;
+			}
+		}
+
+		string GitBranch
+		{
+			get
+			{
+				var name = Git?.Head.Name;
+				return name == "master" ? null : name;
+			}
+		}
+
+		Commit Commit
+			=> Git?.Head.Commits.FirstOrDefault();
+
+		string GitCommitId
+			=> Commit?.Id.Sha.Substring(0, 8);
+
+		Commit _lastCommit;
+		Commit LastCommit
+		{
+			get
+			{
+				if (_lastCommit == null)
+					_lastCommit = GetLastCommit();
+				return _lastCommit;
+			}
+		}
+
+		Commit GetLastCommit()
+		{
+			var file = File;
+			var commits = Git.Commits
+			   .Where(c => c.Parents.Count() == 1 && c.Tree[file] != null &&
+				  (c.Parents.FirstOrDefault().Tree[file] == null ||
+					 c.Tree[file].Target.Id !=
+					 c.Parents.FirstOrDefault().Tree[file].Target.Id));
+
+			var lastCommit = commits?.FirstOrDefault();
+			if (lastCommit == null)
+			{
+				Commit c = Commit;		
+				while (c != null)
+				{
+					lastCommit = c;
+					c = c.Parents.FirstOrDefault();
+				}
+			}
+
+			return lastCommit;
+		}
+
+		string _revision = null;
+		string Revision
+		{
+			get
+			{
+				if (_revision == null)
+					_revision = GetRevision();
+				return _revision;
+			}
+		}
+
+		// Get the number of minutes since the last commit of the version file
+		//  and the most recent change to the repository. Ish.
+		string GetRevision()
+		{
+			DateTime start = LastCommit.Author.When.DateTime.ToUniversalTime();
+			
+			DateTime stop;
+			if (GitIsModified)
+				stop = DateTime.UtcNow;
+			else
+				stop = Commit.Author.When.DateTime.ToUniversalTime();
+
+			return ((int)stop.Subtract(start).TotalMinutes).ToString();
+		}
+
+		string AssemblyVersion
+		{
+			get 
+			{
+				if (true /*IsPublished*/)
+				{
+					return part(this.Version, 2);					
+				}
+				else
+					return this.Version;
+			}
+		}
+		
+		string AssemblyFileVersion
+			=> this.Version;
+		
+		string AssemblyInformationalVersion
+		{
+			get 
+			{
+				string post = Post;				
+				if (GitIsModified)
+					post += (post == null ? "" : ".") + "mod";
+
+
+				return part(this.Version, 3)
+					+ (String.IsNullOrWhiteSpace(Branch)    ? null : "=" + Branch)
+					+ (String.IsNullOrWhiteSpace(Pre)       ? null : "-" + Pre)
+					+ (IsPublished ? null : (
+						  (String.IsNullOrWhiteSpace(post)  ? null : "+" + post)
+						+ (String.IsNullOrWhiteSpace(Build) ? null : "~" + Build)
+					))
+					;
+			}
+		}
+#>
