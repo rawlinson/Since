@@ -1,14 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Since.Text
 {
+    using NodeReference = WeakReference<InternedStringNode>;
+
     /// <seealso cref="InternedString" />
     public class InternedStringNode
     {
         /// <summary>
         /// The children of the node.
         /// </summary>
-        public List<InternedStringNode> Children;
+        public List<NodeReference> Children;
 
         /// <summary>
         /// The parent of the node.
@@ -77,8 +80,12 @@ namespace Since.Text
                 InternedStringNode next = null;
                 if (node.Children != null)
                 {
-                    foreach (var n in node.Children)
+                    foreach (var wn in node.Children)
                     {
+                        InternedStringNode n;
+                        if (!wn.TryGetTarget(out n))
+                            continue;
+
                         var k = 0;
                         for (; k < n.Value.Length && i < value.Length; k++, i++)
                         {
@@ -97,15 +104,15 @@ namespace Since.Text
                         var newNode = new InternedStringNode
                         {
                             Value = n.Value.Substring(0, k),
-                            Children = new List<InternedStringNode>(2)
+                            Children = new List<NodeReference>(2)
                         };
                         n.Value = n.Value.Substring(k);
 
-                        node.Children.Remove(n);
-                        newNode.Children.Add(n);
+                        node.Children.Remove(wn);
+                        newNode.Children.Add(wn);
                         n.Parent = newNode;
 
-                        node.Children.Add(newNode);
+                        node.Children.Add(new NodeReference(node));
                         newNode.Parent = node;
 
                         next = newNode;
@@ -117,8 +124,8 @@ namespace Since.Text
                 {
                     var newNode = new InternedStringNode {Parent = node, Value = value.Substring(i)};
                     if (node.Children == null)
-                        node.Children = new List<InternedStringNode>(2);
-                    node.Children.Add(newNode);
+                        node.Children = new List<NodeReference>(2);
+                    node.Children.Add(new NodeReference(newNode));
                     node = newNode;
                     break;
                 }
