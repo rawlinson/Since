@@ -4,6 +4,7 @@
 <#@ assembly name="LibGit2Sharp.dll" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
 <#@ import namespace="LibGit2Sharp" #>
 /*
 	Generated from <#= File #>
@@ -78,6 +79,9 @@ using System.Reflection;
 			}
 		}
 
+		string GitModified
+			=> GitIsModified ? "mod" : null;
+
 		string GitBranch
 		{
 			get
@@ -86,6 +90,12 @@ using System.Reflection;
 				return name == "master" ? null : name;
 			}
 		}
+		
+        bool GitBranchMatches(params string[] patterns)
+        {
+            string name = Git?.Head.CanonicalName;
+            return name == null ? false : patterns.Any(pattern => Regex.IsMatch(name, pattern));
+        }
 
 		Commit Commit
 			=> Git?.Head.Commits.FirstOrDefault();
@@ -173,19 +183,27 @@ using System.Reflection;
 		{
 			get 
 			{
-				string post = Post;				
-				if (GitIsModified)
-					post += (post == null ? "" : ".") + "mod";
-
-
 				return part(this.Version, 3)
-					+ (String.IsNullOrWhiteSpace(Branch)    ? null : "=" + Branch)
-					+ (String.IsNullOrWhiteSpace(Pre)       ? null : "-" + Pre)
+					+ (Branch == null    ? null :  "_" + Branch)
+					+ (Pre == null       ? null :  "-" + Pre)
 					+ (IsPublished ? null : (
-						  (String.IsNullOrWhiteSpace(post)  ? null : "+" + post)
-						+ (String.IsNullOrWhiteSpace(Build) ? null : "~" + Build)
+						  (Post == null  ? null :  "+" + Post)
+						+ (Build == null ? null : " (" + Build + ")")
 					))
 					;
 			}
 		}
+		
+        static string Combine(params string[] values)
+        {
+            string result = String.Empty;
+            foreach (var value in values)
+            {
+                if (value == null)
+                    return null;
+                string sep = String.IsNullOrEmpty(result) || String.IsNullOrEmpty(value) ? "" : ".";
+                result += sep + value;
+            }
+            return result;
+        }
 #>
