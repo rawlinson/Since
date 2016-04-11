@@ -1,10 +1,13 @@
-﻿<#
+﻿<#@ template hostSpecific="trueFromBase" language="C#" inherits="Since.Versioning.AssemblyVersionInfoTemplate" #>
+<#@ assembly name="$(SolutionDir)\Since.Versioning\bin\$(ConfigurationName)\Since.Versioning.dll" #>
+<#
 	Version = "0.1.0." + Revision;
-	Branch = GitBranch;
+	Branch = Git.Branch;
 	Pre = null;
-	Post = Combine("dev", Revision, GitModified);
-	Build = Combine("git", GitCommitId);
+	Post = Combine("dev", Revision, Git.Modified);
+	Build = Combine("git", Git.CommitId);
 
-	IsPublished = GitBranchMatches("^refs/tags/v\\d\\.\\d");
+	IsPublished = Git.BranchMatches("^refs/tags/v\\d\\.\\d");
+
+	base.TransformText();
 #>
-<#@ include file="Avers.ttinclude" #>

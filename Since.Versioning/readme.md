@@ -1,12 +1,6 @@
-# Avers 0.1.0
+# Since.Versioning 0.1.0
 
-A Versioning System based on [Semantic Versioning](http://semver.org/) 2.0.0 with altered extensions.
-
-> **Verb**
-
-> **aver** /əˈvɜː/ ‎(_third-person singular simple present [**avers**](https://en.wiktionary.org/wiki/avers#English), present participle **averring**, simple past and past participle **averred**_)
-
-> 1. _to assert the truth of, to affirm with confidence; to declare in a positive manner._
+A versioning system based on [Semantic Versioning](http://semver.org/) 2.0.0 with altered extensions.
 
 ## Summary
 
