@@ -25,7 +25,7 @@ The following extensions are included and should appear in the order shown:
 1. `_<tag string>` specifies the tag of the build and must always match.
 2. `-<pre-release version>` specifies the pre-release version of the build and is considered to be before the main version.
 3. `+<post-release version>` specifies the post-release version of the build and is considered to be after the main version.
-4. ` (<build string>)` specifies the build string and is always ignored.
+4. `␣(<build string>)` specifies the build string and is always ignored.
 
 ## Examples
 
