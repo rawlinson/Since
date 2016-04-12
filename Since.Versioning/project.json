@@ -1,14 +1,9 @@
 ﻿{
   "dependencies": {
-    "LibGit2Sharp": "0.22.0",
+    "LibGit2Sharp": "0.22.0"
   },
   "frameworks": {
-    ".NETFramework,Version=v4.5.2": {
-      "imports": "net452"
-	},
-    "dotnet": {
-      "imports": "net452"
-    }
+    "net46": {}
   },
   "runtimes": {
 	"win": {}

@@ -1,36 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using LibGit2Sharp;
 
 namespace Since.Versioning
 {
     public class Git
     {
+        private Commit _lastCommit;
+
         public Git(string path)
         {
-            this.Repository = this.OpenGitRepo(path);
+            this.Repository = this.OpenRepository(path);
+            this.File = path;
         }
 
-        public string File { get; set; }
+        private string File { get; }
 
         public Repository Repository { get; }
 
-        public bool IsModified
-            => this.Repository.RetrieveStatus((StatusOptions)null).IsDirty;
+        public Branch Branch
+            => this.Repository?.Head;
 
-        public string Modified
-            => this.IsModified ? "mod" : "";
-
-        public string Branch
+        public string BranchName
         {
             get
             {
-                var name = this.Repository?.Head.FriendlyName;
+                var name = this.Branch?.FriendlyName;
                 return name == "master" ? null : name;
             }
         }
@@ -38,14 +35,19 @@ namespace Since.Versioning
         public Commit Commit
             => this.Repository?.Head.Commits.FirstOrDefault();
 
-        public string CommitId
+        public string CommitIdShort
             => this.Commit?.Id.Sha.Substring(0, 8);
 
-        Commit _lastCommit;
-        public Commit LastCommit
+        public Commit LastVersionCommit
             => _lastCommit ?? (
-               _lastCommit = this.GetLastCommit()
+               _lastCommit = this.GetLastVersionCommit()
             );
+
+        public bool IsModified
+            => this.Repository.RetrieveStatus((StatusOptions)null).IsDirty;
+
+        public string ModifiedString
+            => this.IsModified ? "mod" : null;
 
         public bool BranchMatches(params string[] patterns)
         {
@@ -53,38 +55,43 @@ namespace Since.Versioning
             return name == null ? false : patterns.Any(pattern => Regex.IsMatch(name, pattern));
         }
 
-        private Repository OpenGitRepo(string path)
+        private Commit GetRootCommit(Commit commit)
         {
+            var filter = new CommitFilter
+            {
+                IncludeReachableFrom = commit,
+                SortBy = CommitSortStrategies.Reverse | CommitSortStrategies.Time
+            };
+
+            return this.Repository.Commits.QueryBy(filter)
+                .Where(c => !c.Parents.Any()).FirstOrDefault();
+        }
+
+        private Commit GetLastVersionCommit()
+        {
+            var file = this.File;
+            var commits = this.Repository.Commits
+               .Where(c => c.Parents.Count() == 1
+                   && c.Tree[file] != null
+                   && (c.Parents.First().Tree[file] == null
+                    || c.Tree[file].Target.Id != c.Parents.First().Tree[file].Target.Id)
+                      );
+
+            return commits?.FirstOrDefault() ?? this.GetRootCommit(this.Commit);
+        }
+
+        private Repository OpenRepository(string path)
+        {
+            Contract.Requires(path != null);
+
             while (!Directory.Exists(Path.Combine(path, ".git")))
             {
                 path = Path.GetDirectoryName(path);
                 if (path == null)
                     return null;
             }
+
             return new Repository(path);
-        }
-
-        Commit GetLastCommit()
-        {
-            var file = this.File;
-            var commits = this.Repository.Commits
-               .Where(c => c.Parents.Count() == 1 && c.Tree[file] != null &&
-                  (c.Parents.FirstOrDefault().Tree[file] == null ||
-                     c.Tree[file].Target.Id !=
-                     c.Parents.FirstOrDefault().Tree[file].Target.Id));
-
-            var lastCommit = commits?.FirstOrDefault();
-            if (lastCommit == null)
-            {
-                Commit c = Commit;
-                while (c != null)
-                {
-                    lastCommit = c;
-                    c = c.Parents.FirstOrDefault();
-                }
-            }
-
-            return lastCommit;
         }
     }
 }

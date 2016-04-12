@@ -2,10 +2,10 @@
 <#@ assembly name="$(SolutionDir)\Since.Versioning\bin\$(ConfigurationName)\Since.Versioning.dll" #>
 <#
 	Version = "0.1.0." + Revision;
-	Branch = Git.Branch;
+	Branch = Git.BranchName;
 	Pre = null;
-	Post = Combine("dev", Revision, Git.Modified);
-	Build = Combine("git", Git.CommitId);
+	Post = Join("dev", Revision, Git.ModifiedString ?? "");
+	Build = Join("git", Git.CommitIdShort);
 
 	IsPublished = Git.BranchMatches("^refs/tags/v\\d\\.\\d");
 
