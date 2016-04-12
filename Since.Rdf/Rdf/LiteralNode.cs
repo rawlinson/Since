@@ -5,6 +5,7 @@ using Since.Rdf.Schema;
 
 namespace Since.Rdf
 {
+    [Immutable]
     public class LiteralNode : Node, IEquatable<LiteralNode>
     {
         public LiteralNode(string plainLiteral)
@@ -60,6 +61,7 @@ namespace Since.Rdf
         {
             return Xsd.TryGetValueFromString(this.Value, this.DataType, out obj);
         }
+
         public bool TryGetValue(out object obj)
         {
             return Xsd.TryGetValueFromString(this.Value, this.DataType, out obj);

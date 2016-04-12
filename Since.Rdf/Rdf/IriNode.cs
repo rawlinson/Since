@@ -4,6 +4,7 @@ using Since.Net;
 
 namespace Since.Rdf
 {
+    [Immutable]
     public class IriNode : Node, IEquatable<IriNode>
     {
         public IriNode(Iri iri)

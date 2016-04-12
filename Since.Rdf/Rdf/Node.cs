@@ -5,6 +5,7 @@ namespace Since.Rdf
     /// <summary>
     /// 
     /// </summary>
+    [Immutable]
     public interface INode : IMatchable<INode>
     {
     }
@@ -12,26 +13,25 @@ namespace Since.Rdf
     /// <summary>
     /// 
     /// </summary>
+    [Immutable]
     public abstract class Node : INode
     {
         /// <inheritdoc />
         public bool Matches(INode other)
             => Node.Matches(this, other);
 
-        private static bool Matches<T>(T nodeA, T nodeB)
-            where T : INode
-            => nodeA.Equals(nodeB);
-
-        private static bool Matches<T>(AnyNode _, T __)
-            where T : INode
-            => true;
-
-        private static bool Matches<T>(T _, AnyNode __)
-            where T : INode
-            => true;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nodeA"></param>
+        /// <param name="nodeB"></param>
+        /// <returns></returns>
+        public static bool Matches(INode nodeA, INode nodeB)
+            => nodeA is AnyNode || nodeB is AnyNode || nodeA.Equals(nodeB);
     }
 
     /// <inheritdoc />
+    [Immutable]
     public class AnyNode : Node
     {
         /// <inheritdoc />
@@ -44,6 +44,7 @@ namespace Since.Rdf
     /// <summary>
     /// 
     /// </summary>
+    [Immutable]
     public class BlankNode : Node
     {
         /// <inheritdoc />

@@ -115,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\BooleanExtensions.cs" />
+    <Compile Include="ImmutableAttribute.cs" />
     <Compile Include="Properties\AssemblyVersionInfo.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

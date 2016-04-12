@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Since
 {
-    public enum AutoBools
+    public enum AutoBool
     {
         Auto = -1, False = 0, True = 1
     }

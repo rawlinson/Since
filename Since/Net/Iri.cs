@@ -2,6 +2,7 @@
 
 namespace Since.Net
 {
+    [Immutable]
     public class Iri : InternedString
     {
         public Iri(string iri)

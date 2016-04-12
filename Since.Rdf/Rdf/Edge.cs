@@ -1,10 +1,12 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System.ComponentModel;
+using System.Diagnostics.Contracts;
 
 namespace Since.Rdf
 {
     /// <summary>
     /// 
     /// </summary>
+    [Immutable]
     public class Edge : IMatchable<Edge>
     {
         /// <summary>
@@ -25,22 +27,22 @@ namespace Since.Rdf
         /// <summary>
         /// 
         /// </summary>
-        public INode Subject { get; set; }
+        public INode Subject { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public INode Predicate { get; set; }
+        public INode Predicate { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public INode Object { get; set; }
+        public INode Object { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public INode Context { get; set; }
+        public INode Context { get; }
 
         /// <summary>
         /// Gets whether the <see cref="Edge"/> is empty or not.

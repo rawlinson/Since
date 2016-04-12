@@ -8,6 +8,7 @@ namespace Since.Text
     ///     backing store.
     /// </summary>
     /// <seealso cref="InternedStringNode" />
+    [Immutable]
     public class InternedString : IEquatable<InternedString>
     {
         /// <summary>

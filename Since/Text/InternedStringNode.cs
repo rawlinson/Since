@@ -6,22 +6,26 @@ namespace Since.Text
     using NodeReference = WeakReference<InternedStringNode>;
 
     /// <seealso cref="InternedString" />
-    public class InternedStringNode
+    [Immutable(Trusted = true)]
+    public sealed class InternedStringNode
     {
+        private List<NodeReference> _children;
+
         /// <summary>
         /// The children of the node.
         /// </summary>
-        public List<NodeReference> Children;
+        public IReadOnlyCollection<NodeReference> Children
+            => _children.AsReadOnly();
 
         /// <summary>
         /// The parent of the node.
         /// </summary>
-        public InternedStringNode Parent;
-
+        public InternedStringNode Parent { get; private set; }
+        
         /// <summary>
         /// The value of the node.
         /// </summary>
-        public string Value;
+        public string Value { get; private set; }
 
         /// <summary>
         /// Gets the root of the node.
@@ -78,9 +82,9 @@ namespace Since.Text
             for (var i = 0; i < value.Length;)
             {
                 InternedStringNode next = null;
-                if (node.Children != null)
+                if (node._children != null)
                 {
-                    foreach (var wn in node.Children)
+                    foreach (var wn in node._children)
                     {
                         InternedStringNode n;
                         if (!wn.TryGetTarget(out n))
@@ -104,15 +108,15 @@ namespace Since.Text
                         var newNode = new InternedStringNode
                         {
                             Value = n.Value.Substring(0, k),
-                            Children = new List<NodeReference>(2)
+                            _children = new List<NodeReference>(2)
                         };
                         n.Value = n.Value.Substring(k);
 
-                        node.Children.Remove(wn);
-                        newNode.Children.Add(wn);
+                        node._children.Remove(wn);
+                        newNode._children.Add(wn);
                         n.Parent = newNode;
 
-                        node.Children.Add(new NodeReference(node));
+                        node._children.Add(new NodeReference(node));
                         newNode.Parent = node;
 
                         next = newNode;
@@ -123,9 +127,9 @@ namespace Since.Text
                 if (next == null && i < value.Length)
                 {
                     var newNode = new InternedStringNode {Parent = node, Value = value.Substring(i)};
-                    if (node.Children == null)
-                        node.Children = new List<NodeReference>(2);
-                    node.Children.Add(new NodeReference(newNode));
+                    if (node._children == null)
+                        node._children = new List<NodeReference>(2);
+                    node._children.Add(new NodeReference(newNode));
                     node = newNode;
                     break;
                 }
