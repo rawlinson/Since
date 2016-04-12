@@ -4,9 +4,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using TestHelper;
-using Since.ImmutabilityAnalyzer;
+using Since.Immutability.Analyzer;
 
-namespace Since.ImmutabilityAnalyzer.Test
+namespace Since.Immutability.Analyzer.Test
 {
     [TestClass]
     public class UnitTest : CodeFixVerifier

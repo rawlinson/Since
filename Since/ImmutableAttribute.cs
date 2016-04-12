@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Since
 {
-    [System.AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Field | AttributeTargets.Property,
+    [System.AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface | AttributeTargets.Field | AttributeTargets.Property,
         Inherited = false, AllowMultiple = false)]
     public sealed class ImmutableAttribute : Attribute
     {

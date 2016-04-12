@@ -16,11 +16,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Since.Versioning", "Since.Versioning\Since.Versioning.csproj", "{99EDFF86-DBE0-46EB-ABDD-38917DA879B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Since.ImmutabilityAnalyzer", "Since.ImmutabilityAnalyzer\Since.ImmutabilityAnalyzer\Since.ImmutabilityAnalyzer.csproj", "{1CD61638-ECE9-41B1-BD7E-E4ADE21B82C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Since.Immutability.Analyzer", "Since.Immutability\Since.Immutability.Analyzer\Since.Immutability.Analyzer.csproj", "{1CD61638-ECE9-41B1-BD7E-E4ADE21B82C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Since.ImmutabilityAnalyzer.Test", "Since.ImmutabilityAnalyzer\Since.ImmutabilityAnalyzer.Test\Since.ImmutabilityAnalyzer.Test.csproj", "{916E1E0F-7AD6-4ADC-A144-A1874775EA58}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Since.Immutability.Analyzer.Test", "Since.Immutability\Since.Immutability.Analyzer.Test\Since.Immutability.Analyzer.Test.csproj", "{916E1E0F-7AD6-4ADC-A144-A1874775EA58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Since.ImmutabilityAnalyzer.Vsix", "Since.ImmutabilityAnalyzer\Since.ImmutabilityAnalyzer.Vsix\Since.ImmutabilityAnalyzer.Vsix.csproj", "{B30829B3-ED90-4DB0-B3B4-C1D2FD0C2E21}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Since.Immutability.Analyzer.Vsix", "Since.Immutability\Since.Immutability.Analyzer.Vsix\Since.Immutability.Analyzer.Vsix.csproj", "{B30829B3-ED90-4DB0-B3B4-C1D2FD0C2E21}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Since.Mutability", "Since.Mutability", "{496012E0-17D6-40FB-AEB0-A410124EFA2F}"
 EndProject

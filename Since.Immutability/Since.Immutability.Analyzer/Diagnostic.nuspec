@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <id>Since.ImmutabilityAnalyzer</id>
+    <id>Since.Immutability.Analyzer</id>
     <version>1.0.0.0</version>
-    <title>Since.ImmutabilityAnalyzer</title>
+    <title>Since.Immutability.Analyzer</title>
     <authors>Tim Rawlinson</authors>
     <owners>Tim Rawlinson</owners>
-    <licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
+    <!--<licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
     <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
-    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
+    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Since.ImmutabilityAnalyzer</description>
+    <description>Since.Immutability.Analyzer</description>
     <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
-    <copyright>Copyright</copyright>
-    <tags>Since.ImmutabilityAnalyzer, analyzers</tags>
+    <copyright>Copyright © 2016 Tim Rawlinson</copyright>
+    <tags>Since.Immutability.Analyzer, analyzers</tags>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System" targetFramework="" />
     </frameworkAssemblies>

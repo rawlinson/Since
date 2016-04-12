@@ -32,8 +32,8 @@
     <ProjectGuid>{B30829B3-ED90-4DB0-B3B4-C1D2FD0C2E21}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Since.ImmutabilityAnalyzer.Vsix</RootNamespace>
-    <AssemblyName>Since.ImmutabilityAnalyzer.Vsix</AssemblyName>
+    <RootNamespace>Since.Immutability.Analyzer</RootNamespace>
+    <AssemblyName>Since.Immutability.Analyzer</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
@@ -66,14 +66,16 @@
     <StartArguments>/rootsuffix Roslyn</StartArguments>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Since.ImmutabilityAnalyzer\Since.ImmutabilityAnalyzer.csproj">
+    <ProjectReference Include="..\Since.Immutability.Analyzer\Since.Immutability.Analyzer.csproj">
       <Project>{1CD61638-ECE9-41B1-BD7E-E4ADE21B82C4}</Project>
-      <Name>Since.ImmutabilityAnalyzer</Name>
+      <Name>Since.Immutability.Analyzer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +89,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\packages\Since.Immutability.Analyzer.1.0.5946.40841\analyzers\dotnet\cs\Since.Immutability.Analyzer.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
