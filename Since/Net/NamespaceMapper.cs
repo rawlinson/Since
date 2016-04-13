@@ -55,17 +55,15 @@ namespace Since.Net
 
             var node = iri.Node;
             string prefix = null;
-            var localName = "";
 
             while (node != null)
             {
                 if (_nodeToPrefix.TryGetValue(node, out prefix))
                     break;
-                localName = node.Value + localName;
                 node = node.Parent;
             }
 
-            return prefix == null ? localName : $"{prefix}:{localName}";
+            return prefix + InternedStringNode.Substring(node, iri.Node);
         }
 
         public override string ToString()

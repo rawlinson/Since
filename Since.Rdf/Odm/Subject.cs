@@ -38,9 +38,9 @@ namespace Since.Odm
             Contract.Requires(edge != null);
             Contract.Requires(edge.Predicate != null);
             Contract.Requires(edge.Object != null);
-
+            
             if (edge.Subject == null)
-                edge.Subject = this.About;
+                edge = edge.With(subject: this.About);
 
             this.AddInternal(edge);
         }

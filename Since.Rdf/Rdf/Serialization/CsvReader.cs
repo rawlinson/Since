@@ -8,13 +8,14 @@ namespace Since.Rdf.Serialization
 {
     public class CsvReader
     {
-        TextReader reader;
-        char delimiter = ',';
-        char qualifier = '"';
+        private static readonly char DELIMITER_CHAR = ',';
+        private static readonly char QUALIFIER_CHAR = '"';
+
+        TextReader _reader;
 
         public CsvReader(TextReader reader)
         {
-            this.reader = reader;
+            _reader = reader;
         }
 
         public IEnumerable<Edge> Quads()
@@ -29,12 +30,12 @@ namespace Since.Rdf.Serialization
                 BlankNode blank = new BlankNode();
                 for (int i = 0; i < 6; i++)
                     yield return new Edge
-                    {
-                        Subject = blank,
-                        Predicate = new IriNode(new Iri(gen + headers[i])),
-                        Object = new LiteralNode(record[i].Trim()),
-                        Context = context
-                    };
+                    (
+                        subject: blank,
+                        predicate: new IriNode(new Iri(gen + headers[i])),
+                        obj: new LiteralNode(record[i].Trim()),
+                        context: context
+                    );
             }
         }
 
@@ -45,16 +46,16 @@ namespace Since.Rdf.Serialization
 
             bool quote = false;
 
-            while (reader.Peek() != -1)
+            while (_reader.Peek() != -1)
             {
-                var c = (char)reader.Read();
+                var c = (char)_reader.Read();
 
                 if (quote)
                 {
-                    if (c == qualifier)
+                    if (c == QUALIFIER_CHAR)
                     {
-                        if (reader.Peek() == qualifier)
-                            field.Append((char)reader.Read());
+                        if (_reader.Peek() == QUALIFIER_CHAR)
+                            field.Append((char)_reader.Read());
                         else
                             quote = false;
                     }
@@ -63,12 +64,12 @@ namespace Since.Rdf.Serialization
                 }
                 else
                 {
-                    if (c == delimiter)
+                    if (c == DELIMITER_CHAR)
                     {
                         record.Add(field.ToString());
                         field.Clear();
                     }
-                    else if (c == qualifier)
+                    else if (c == QUALIFIER_CHAR)
                     {
                         quote = true;
                     }

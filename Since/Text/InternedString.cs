@@ -48,7 +48,8 @@ namespace Since.Text
         /// <summary>
         ///     Gets the default <see cref="InternedStringNode" /> root of <see cref="InternedString" />s.
         /// </summary>
-        public static InternedStringNode DefaultRoot { get; } = new InternedStringNode();
+        public static InternedStringNode DefaultRoot { get; }
+            = new InternedStringNode();
 
         /// <summary>
         ///     Gets the <see cref="InternedStringNode" /> root of the <see cref="InternedString" />.
@@ -90,17 +91,7 @@ namespace Since.Text
         ///     <see langword="true" />
         /// </returns>
         public bool StartsWith(InternedString value)
-        {
-            Contract.Requires(value != null);
-
-            for (var node = this.Node; node != null; node = node.Parent)
-            {
-                if (node == value.Node)
-                    return true;
-            }
-
-            return false;
-        }
+            => this.Node.HasParent(value.Node);
 
         public override int GetHashCode()
             => new {this.Node}.GetHashCode();

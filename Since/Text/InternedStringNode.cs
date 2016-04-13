@@ -6,26 +6,43 @@ namespace Since.Text
     using NodeReference = WeakReference<InternedStringNode>;
 
     /// <seealso cref="InternedString" />
-    [Immutable(Trusted = true)]
+    [Immutable]
     public sealed class InternedStringNode
     {
+        [Immutable(Trusted = true)]
+        private InternedStringNode _parent;
+
+        [Immutable(Trusted = true)]
         private List<NodeReference> _children;
 
-        /// <summary>
-        /// The children of the node.
-        /// </summary>
-        public IReadOnlyCollection<NodeReference> Children
-            => _children.AsReadOnly();
+        [Immutable(Trusted = true)]
+        private string _value;
+
+        public InternedStringNode() { }
+
+        private InternedStringNode(InternedStringNode parent, List<NodeReference> children, string value)
+        {
+            _parent = parent;
+            _children = children;
+            _value = value;
+        }
 
         /// <summary>
         /// The parent of the node.
         /// </summary>
-        public InternedStringNode Parent { get; private set; }
+        public InternedStringNode Parent
+            => _parent;
         
-        /// <summary>
-        /// The value of the node.
-        /// </summary>
-        public string Value { get; private set; }
+        public bool HasParent(InternedStringNode node)
+        {
+            for (var n = this; n != null; n = n._parent)
+            {
+                if (n == node)
+                    return true;
+            }
+
+            return node == null;
+        }
 
         /// <summary>
         /// Gets the root of the node.
@@ -35,8 +52,8 @@ namespace Since.Text
             get
             {
                 var node = this;
-                while (node.Parent != null)
-                    node = node.Parent;
+                while (node._parent != null)
+                    node = node._parent;
                 return node;
             }
         }
@@ -48,24 +65,6 @@ namespace Since.Text
         /// <returns></returns>
         public InternedStringNode this[string value]
             => this.Get(value);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => Value;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public string ToAbsoluteString()
-        {
-            if (Parent != null)
-                return Parent.ToAbsoluteString() + Value;
-            return Value;
-        }
 
         /// <summary>
         /// 
@@ -91,12 +90,12 @@ namespace Since.Text
                             continue;
 
                         var k = 0;
-                        for (; k < n.Value.Length && i < value.Length; k++, i++)
+                        for (; k < n._value.Length && i < value.Length; k++, i++)
                         {
-                            if (value[i] != n.Value[k])
+                            if (value[i] != n._value[k])
                                 break;
                         }
-                        if (k == n.Value.Length)
+                        if (k == n._value.Length)
                         {
                             next = n;
                             break;
@@ -105,19 +104,17 @@ namespace Since.Text
                         if (k <= 0)
                             continue;
 
-                        var newNode = new InternedStringNode
-                        {
-                            Value = n.Value.Substring(0, k),
-                            _children = new List<NodeReference>(2)
-                        };
-                        n.Value = n.Value.Substring(k);
+                        var newNode = new InternedStringNode(null,
+                            new List<NodeReference>(2),
+                            _value.Substring(0, k));
+                        n._value = n._value.Substring(k);
 
                         node._children.Remove(wn);
                         newNode._children.Add(wn);
-                        n.Parent = newNode;
+                        n._parent = newNode;
 
                         node._children.Add(new NodeReference(node));
-                        newNode.Parent = node;
+                        newNode._parent = node;
 
                         next = newNode;
                         break;
@@ -126,7 +123,7 @@ namespace Since.Text
 
                 if (next == null && i < value.Length)
                 {
-                    var newNode = new InternedStringNode {Parent = node, Value = value.Substring(i)};
+                    var newNode = new InternedStringNode(node, null, value.Substring(i));
                     if (node._children == null)
                         node._children = new List<NodeReference>(2);
                     node._children.Add(new NodeReference(newNode));
@@ -140,6 +137,27 @@ namespace Since.Text
             }
 
             return node;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => this.ToAbsoluteString();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public string ToAbsoluteString()
+            => Substring(null, this);
+
+        public static string Substring(InternedStringNode exclusiveFrom, InternedStringNode inclusiveUntil)
+        {
+            if (inclusiveUntil != exclusiveFrom)
+                return Substring(exclusiveFrom, inclusiveUntil._parent) + inclusiveUntil._value;
+            return inclusiveUntil._value;
         }
     }
 }

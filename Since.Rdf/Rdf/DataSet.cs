@@ -24,16 +24,20 @@ namespace Since.Rdf
         }
 
         /// <inheritdoc />
-        public override IEnumerable<Edge> Edges => _edges;
+        public override IEnumerable<Edge> Edges
+            => _edges;
 
         /// <inheritdoc />
-        public override int EdgeCount => _edges.Count;
+        public override int EdgeCount
+            => _edges.Count;
 
         /// <inheritdoc />
-        public override IEnumerable<INode> Nodes => _nodes;
+        public override IEnumerable<INode> Nodes
+            => _nodes;
 
         /// <inheritdoc />
-        public override int NodeCount => _nodes.Count;
+        public override int NodeCount
+            => _nodes.Count;
         
         private INode GetOrAddNode(INode node)
         {
@@ -49,10 +53,12 @@ namespace Since.Rdf
             Contract.Requires(edge.Predicate != null);
             Contract.Requires(edge.Object != null);
 
-            edge.Subject = this.GetOrAddNode(edge.Subject);
-            edge.Predicate = this.GetOrAddNode(edge.Predicate);
-            edge.Object = this.GetOrAddNode(edge.Object);
-            edge.Context = edge.Context == null ? this.DefaultGraphNode : this.GetOrAddNode(edge.Context);
+            edge = new Edge(
+                this.GetOrAddNode(edge.Subject),
+                this.GetOrAddNode(edge.Predicate),
+                this.GetOrAddNode(edge.Object),
+                edge.Context == null ? this.DefaultGraphNode : this.GetOrAddNode(edge.Context)
+                );
 
             _edges.GetOrAdd(ref edge);
         }

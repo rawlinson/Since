@@ -8,11 +8,11 @@ namespace Since.Rdf.Serialization
 {
     public class NQuadsReader
     {
-        private TextReader reader;
+        private TextReader _reader;
 
         public NQuadsReader(TextReader reader)
         {
-            this.reader = reader;
+            _reader = reader;
         }
 
         bool TrySplit(string line, char delimiter, ref string head, ref string tail)
@@ -77,44 +77,48 @@ namespace Since.Rdf.Serialization
             return node;
         }
 
-        bool TryReadQuad(string line, out Edge quad)
+        bool TryReadQuad(string line, out Edge edge)
         {
-            quad = new Edge();
+            edge = null;
 
             line = line.Trim();
             if (String.IsNullOrEmpty(line) || line.StartsWith("#"))
                 return false;
 
             string temp = "";
+
+            INode subject;
             if (TryReadIri(line, ref temp, ref line))
             {
-                quad.Subject = new IriNode(new Iri(temp));
+                subject = new IriNode(new Iri(temp));
             }
             else if (TryReadBlankNode(line, ref temp, ref line))
             {
-                quad.Subject = GetOrCreateBlankNode(temp);
+                subject = GetOrCreateBlankNode(temp);
             }
             else
                 return false;
 
             line = line.TrimStart();
 
+            INode predicate;
             if (TryReadIri(line, ref temp, ref line))
             {
-                quad.Predicate = new IriNode(new Iri(temp));
+                predicate = new IriNode(new Iri(temp));
             }
             else
                 return false;
 
             line = line.TrimStart();
 
+            INode obj;
             if (TryReadIri(line, ref temp, ref line))
             {
-                quad.Object = new IriNode(new Iri(temp));
+                obj = new IriNode(new Iri(temp));
             }
             else if (TryReadBlankNode(line, ref temp, ref line))
             {
-                quad.Object = GetOrCreateBlankNode(temp);
+                obj = GetOrCreateBlankNode(temp);
             }
             else if (line.StartsWith("\""))
             {
@@ -123,23 +127,26 @@ namespace Since.Rdf.Serialization
                 if (!TryReadLiteral(line, ref value, ref dataType, ref languageCode, ref line))
                     return false;
                 if (dataType == null)
-                    quad.Object = new LiteralNode(value, languageCode);
+                    obj = new LiteralNode(value, languageCode);
                 else
-                    quad.Object = new LiteralNode(value, dataType);
+                    obj = new LiteralNode(value, dataType);
             }
             else
                 return false;
 
             line = line.TrimStart();
 
+            INode context = null;
             if (TryReadIri(line, ref temp, ref line))
             {
-                quad.Context = new IriNode(new Iri(temp));
+                context = new IriNode(new Iri(temp));
             }
             else if (TryReadBlankNode(line, ref temp, ref line))
             {
-                quad.Context = GetOrCreateBlankNode(temp);
+                context = GetOrCreateBlankNode(temp);
             }
+
+            edge = new Edge(subject, predicate, obj, context);
 
             return true;
         }
@@ -147,13 +154,13 @@ namespace Since.Rdf.Serialization
         public Edge ReadQuad()
         {
             Edge quad = null;
-            TryReadQuad(reader.ReadLine(), out quad);
+            TryReadQuad(_reader.ReadLine(), out quad);
             return quad;
         }
 
         public IEnumerable<Edge> Triples()
         {
-            var stream = new Antlr4.Runtime.AntlrInputStream(reader);
+            var stream = new Antlr4.Runtime.AntlrInputStream(_reader);
             var lexer = new NQuadsLexer(stream);
             var parser = new NQuadsParser(new Antlr4.Runtime.CommonTokenStream(lexer));
             
@@ -165,13 +172,13 @@ namespace Since.Rdf.Serialization
 
         public IEnumerable<Edge> Quads()
         {
-            string line = reader.ReadLine();
+            string line = _reader.ReadLine();
             while (line != null)
             {
                 Edge quad;
                 if (TryReadQuad(line, out quad))
                     yield return quad;
-                line = reader.ReadLine();
+                line = _reader.ReadLine();
             }
         }
     }

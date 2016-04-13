@@ -58,6 +58,13 @@ namespace Since.Rdf
         public bool Matches(Edge edge)
             => Edge.Matches(this, edge);
 
+        public Edge With(INode subject = null, INode predicate = null, INode obj = null, INode context = null)
+            => new Edge(
+                subject ?? this.Subject,
+                predicate ?? this.Predicate,
+                obj ?? this.Object,
+                context ?? this.Context);
+
         /// <summary>
         /// 
         /// </summary>

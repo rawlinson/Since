@@ -50,7 +50,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Since\Since.csproj">
+    <ProjectReference Include="..\..\Since\Since.csproj">
       <Project>{1668bbc9-294a-46b7-915e-0c532e5e7e9d}</Project>
       <Name>Since</Name>
     </ProjectReference>

@@ -162,6 +162,7 @@ namespace Since.Rdf.ObjectModel
 
             public void Add(INode key, object value)
             {
+                CollectionChanged?.Invoke(this, null);
                 throw new NotImplementedException();
             }
 
