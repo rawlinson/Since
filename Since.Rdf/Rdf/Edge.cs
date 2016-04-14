@@ -54,16 +54,16 @@ namespace Since.Rdf
             && this.Object == null
             && this.Context == null;
 
-        /// <inheritDoc />
-        public bool Matches(Edge edge)
-            => Edge.Matches(this, edge);
-
         public Edge With(INode subject = null, INode predicate = null, INode obj = null, INode context = null)
             => new Edge(
                 subject ?? this.Subject,
                 predicate ?? this.Predicate,
                 obj ?? this.Object,
                 context ?? this.Context);
+
+        /// <inheritDoc />
+        public bool Matches(Edge edge)
+            => Edge.Matches(this, edge);
 
         /// <summary>
         /// 
@@ -77,7 +77,7 @@ namespace Since.Rdf
         }
 
         private static bool Matches(INode a, INode b)
-            => a == null || b == null || a.Equals(b);
+            => a is AnyNode || b is AnyNode || (a?.Equals(b) ?? a == b);
 
         /// <summary>
         /// 
@@ -87,8 +87,8 @@ namespace Since.Rdf
         /// <returns></returns>
         public static bool Matches(Edge edgeA, Edge edgeB)
         {
-            Contract.Requires(edgeA != null);
-            Contract.Requires(edgeB != null);
+            if (edgeA == null || edgeB == null)
+                return edgeA == edgeB;
 
             return Edge.Matches(edgeA.Subject, edgeB.Subject)
                    && Edge.Matches(edgeA.Predicate, edgeB.Predicate)
