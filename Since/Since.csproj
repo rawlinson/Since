@@ -116,10 +116,10 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="project.json" />
     <None Include="Since.snk" />
-    <Content Include="Properties\AssemblyVersionInfo.tt">
+    <None Include="Properties\AssemblyVersionInfo.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>AssemblyVersionInfo.cs</LastGenOutput>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\BooleanExtensions.cs" />
