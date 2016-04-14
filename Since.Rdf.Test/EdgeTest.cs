@@ -1,22 +1,10 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Since.Rdf.Test
 {
     [TestClass]
     public class EdgeTest
     {
-        [TestMethod]
-        public void EmptyConstructorTest()
-        {
-            Edge edge = new Edge();
-
-            Assert.AreEqual(null, edge.Subject);
-            Assert.AreEqual(null, edge.Predicate);
-            Assert.AreEqual(null, edge.Object);
-            Assert.AreEqual(null, edge.Context);
-        }
-
         [TestMethod]
         public void ConstructorTest()
         {
@@ -31,32 +19,6 @@ namespace Since.Rdf.Test
             Assert.AreEqual(predicate, edge.Predicate);
             Assert.AreEqual(obj, edge.Object);
             Assert.AreEqual(context, edge.Context);
-        }
-
-        [TestMethod]
-        public void IsEmpty_Empty_True()
-        {
-            Edge edge = new Edge();
-            Assert.IsTrue(edge.IsEmpty);
-        }
-
-        [TestMethod]
-        public void IsEmpty_SingleBlankNode_False()
-        {
-            Edge edge = new Edge();
-            INode node = new BlankNode();
-
-            edge = new Edge(subject: node);
-            Assert.IsFalse(edge.IsEmpty);
-
-            edge = new Edge(predicate: node);
-            Assert.IsFalse(edge.IsEmpty);
-
-            edge = new Edge(obj: node);
-            Assert.IsFalse(edge.IsEmpty);
-
-            edge = new Edge(context: node);
-            Assert.IsFalse(edge.IsEmpty);
         }
 
         [TestMethod]

@@ -166,7 +166,7 @@ namespace Since.Rdf.Serialization
             
             foreach (var child in parser.nquadsDoc().statement())
             {
-                yield return new Edge();
+                yield return null;
             }
         }
 
