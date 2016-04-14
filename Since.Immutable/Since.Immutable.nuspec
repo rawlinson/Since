@@ -15,8 +15,8 @@
     </frameworkAssemblies>
   </metadata>
   <files>
-    <file src="bin\Release\Since.Immutable.dll" target="analyzers\dotnet\cs" exclude="**\Microsoft.CodeAnalysis.*;**\System.Collections.Immutable.*;**\System.Reflection.Metadata.*;**\System.Composition.*" />
-    <file src="bin\Release\Since.Immutable.dll" target="" exclude="**\Microsoft.CodeAnalysis.*;**\System.Collections.Immutable.*;**\System.Reflection.Metadata.*;**\System.Composition.*" />
-    <file src="tools\*.ps1" target="tools\" />
+    <file src="bin\Release\Since.Immutable.dll" target="analyzers\dotnet\cs" />
+    <file src="bin\Release\Since.Immutable.dll" />
+    <file src="Tools\*.ps1" target="tools\" />
   </files>
 </package>

@@ -66,10 +66,10 @@
     </None>
     <None Include="packages.config" />
     <None Include="Since.snk" />
-    <None Include="tools\install.ps1">
+    <None Include="Tools\install.ps1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="tools\uninstall.ps1">
+    <None Include="Tools\uninstall.ps1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
