@@ -6,7 +6,7 @@
   "dependencies": {
     "Microsoft.NETCore": "5.0.0",
     "Microsoft.NETCore.Portable.Compatibility": "1.0.0",
-    "Since.Immutability.Analyzer": "1.0.5946.40841",
+    "Since.Immutable": "0.1.0.7368",
     "System.Diagnostics.Contracts": "4.0.0"
   },
   "frameworks": {

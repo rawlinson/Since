@@ -8,10 +8,10 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace Since.Immutability.Analyzer
+namespace Since.Analyzers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class SinceImmutabilityAnalyzer : DiagnosticAnalyzer
+    public class ImmutabilityAnalyzer : DiagnosticAnalyzer
     {
         private static DiagnosticDescriptor NonImmutableBaseRule = new DiagnosticDescriptor("SIA1001",
             new LocalizableResourceString(nameof(Resources.NonImmutableBaseTitle), Resources.ResourceManager, typeof(Resources)),
