@@ -1,11 +1,9 @@
 ﻿{
-  "dependencies": {
-    "LibGit2Sharp": "0.22.0"
-  },
+  "dependencies": {},
   "frameworks": {
     "net46": {}
   },
   "runtimes": {
-	"win": {}
+    "win": {}
   }
 }

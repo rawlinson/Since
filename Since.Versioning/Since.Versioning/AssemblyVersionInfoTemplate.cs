@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.VisualStudio.TextTemplating;
-using Since.Extensions;
 
 namespace Since.Versioning
 {
@@ -28,7 +27,7 @@ namespace Since.Versioning
             => SubParts(this.Version, 3)
                 + Concat("_", this.Branch)
                 + Concat("-", this.Pre)
-                + (!IsPublished).Then(Concat("+", this.Post) + Concat(" (", this.Build, ")"));
+                + (IsPublished == false ? (Concat("+", this.Post) + Concat(" (", this.Build, ")")) : null);
 
         static string ConcatIf(bool check, params string[] values)
             => check ? string.Concat(values) : null;
