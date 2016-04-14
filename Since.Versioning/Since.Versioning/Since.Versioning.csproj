@@ -3,6 +3,7 @@
   <PropertyGroup>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -15,7 +16,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Since.Versioning</RootNamespace>
     <AssemblyName>Since.Versioning</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
@@ -56,6 +57,11 @@
     <Compile Include="Git.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AssemblyVersionInfoTemplate.cs" />
+    <Compile Include="Properties\AssemblyVersionInfo.cs">
+      <DependentUpon>AssemblyVersionInfo.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Since.Versioning.nuspec" />
@@ -64,6 +70,9 @@
     <None Include="Since.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Since.Versioning.targets">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -76,11 +85,15 @@
       <Private>True</Private>
       <HintPath>..\..\packages\LibGit2Sharp.0.22.0\lib\net40\LibGit2Sharp.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.TextTemplating.15.0, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.TextTemplating.14.0, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\VSSDK\VisualStudioIntegration\Common\Assemblies\v4.0\Microsoft.VisualStudio.TextTemplating.14.0.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.TextTemplating.Interfaces.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="Since.Versioning.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -94,13 +107,21 @@
     <EnableIncludeLibGit2SharpInVsix Condition=" '$(EnableIncludeLibGit2SharpInVsix)'=='' ">true</EnableIncludeLibGit2SharpInVsix>
   </PropertyGroup>
   <ItemGroup Condition=" '$(EnableIncludeLibGit2SharpInVsix)'=='true' ">
-    <Content Include="$(MSBuildThisFileDirectory)..\..\packages\LibGit2Sharp.NativeBinaries.1.0.129\libgit2\windows\**\*.*"
-              Exclude="$(MSBuildThisFileDirectory)..\..\packages\LibGit2Sharp.NativeBinaries.1.0.129\libgit2\windows\**\*.pdb">
+    <Content Include="$(MSBuildThisFileDirectory)..\..\packages\LibGit2Sharp.NativeBinaries.1.0.129\libgit2\windows\**\*.*" Exclude="$(MSBuildThisFileDirectory)..\..\packages\LibGit2Sharp.NativeBinaries.1.0.129\libgit2\windows\**\*.pdb">
       <Link>NativeBinaries\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>DoNotCopy</CopyToOutputDirectory>
       <Private>True</Private>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\AssemblyVersionInfo.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AssemblyVersionInfo.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

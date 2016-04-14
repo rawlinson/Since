@@ -252,3 +252,4 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 /Since/Properties/AssemblyVersionInfo.cs
+/Since.Versioning/Since.Versioning/Properties/AssemblyVersionInfo.cs
