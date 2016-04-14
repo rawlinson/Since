@@ -135,7 +135,6 @@
     <Compile Include="Text\CompoundWordCase.cs" />
     <Compile Include="Text\InternedString.cs" />
     <Compile Include="Text\InternedStringNode.cs" />
-    <EmbeddedResource Include="Properties\Since.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -1,5 +1,5 @@
 ﻿<#@ template hostSpecific="trueFromBase" language="C#" inherits="Since.Versioning.AssemblyVersionInfoTemplate" #>
-<#@ assembly name="$(SolutionDir)\Since.Versioning\bin\$(ConfigurationName)\Since.Versioning.dll" #>
+<#@ assembly name="Since.Versioning.dll" #>
 <#
 	Version = "0.1.0." + Revision;
 	Branch = Git.BranchName;

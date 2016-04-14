@@ -17,10 +17,10 @@
     <AssemblyName>Since.Versioning</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
-    <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
+    <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
     <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
-    <CopyBuildOutputToOutputDirectory>false</CopyBuildOutputToOutputDirectory>
+    <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
     <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -89,17 +89,19 @@
     <Error Condition="!Exists('..\..\packages\LibGit2Sharp.NativeBinaries.1.0.129\build\LibGit2Sharp.NativeBinaries.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\LibGit2Sharp.NativeBinaries.1.0.129\build\LibGit2Sharp.NativeBinaries.props'))" />
   </Target>
   <!--<Import Project="$(MSBuildThisFileDirectory)\..\..\packages\LibGit2Sharp.NativeBinaries.1.0.129\build\LibGit2Sharp.NativeBinaries.props" />
+  -->
   <PropertyGroup>
     <EnableIncludeLibGit2SharpInVsix Condition=" '$(EnableIncludeLibGit2SharpInVsix)'=='' ">true</EnableIncludeLibGit2SharpInVsix>
   </PropertyGroup>
   <ItemGroup Condition=" '$(EnableIncludeLibGit2SharpInVsix)'=='true' ">
-    <Content Include="$(MSBuildThisFileDirectory)..\..\packages\LibGit2Sharp.0.20.1.0\lib\net40\NativeBinaries\**\*.*"
-              Exclude="$(MSBuildThisFileDirectory)..\..\packages\LibGit2Sharp.0.20.1.0\lib\net40\NativeBinaries\**\*.pdb">
+    <Content Include="$(MSBuildThisFileDirectory)..\..\packages\LibGit2Sharp.NativeBinaries.1.0.129\libgit2\windows\**\*.*"
+              Exclude="$(MSBuildThisFileDirectory)..\..\packages\LibGit2Sharp.NativeBinaries.1.0.129\libgit2\windows\**\*.pdb">
       <Link>NativeBinaries\%(RecursiveDir)%(Filename)%(Extension)</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>DoNotCopy</CopyToOutputDirectory>
+      <Private>True</Private>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-  </ItemGroup>-->
+  </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
