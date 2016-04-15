@@ -1,5 +1,7 @@
 ﻿{
-  "dependencies": {},
+  "dependencies": {
+    "LibGit2Sharp": "0.22.0"
+  },
   "frameworks": {
     "net452": {}
   },

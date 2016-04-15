@@ -2,7 +2,7 @@
 <#@ assembly name="Microsoft.VisualStudio.TextTemplating.14.0.dll" #>
 <#@ assembly name="Since.Versioning.dll" #>
 <#
-	Version = "0.2.1." + Revision;
+	Version = "1.0.1." + Revision;
 	Branch = Git.BranchName;
 	Pre = "alpha.1";
 	Post = Join("dev", Revision, Git.ModifiedString ?? "");

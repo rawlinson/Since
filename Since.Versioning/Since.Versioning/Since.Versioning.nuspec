@@ -1,27 +1,21 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <id>$id$</id>
-    <version>$version$</version>
-    <title>$title$</title>
-    <authors>$author$</authors>
-    <owners>$author$</owners>
-    <!--<licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
-    <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
-    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
+    <id>Since.Versioning</id>
+    <version>0.0.0.0</version>
+    <title>Since Versioning 1</title>
+    <authors>Tim Rawlinson</authors>
+    <owners>Tim Rawlinson</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$description$</description>
-    <!--<releaseNotes>Summary of changes made in this release of the package.</releaseNotes>-->
-    <copyright>Copyright © 2016 $author$</copyright>
-    <tags>$id$</tags>
-    <references>
-      <reference file="Since.Versioning.dll"></reference>
-    </references>
+    <description>TextTemplate for generating AssemblyVersionInfo.cs</description>
+    <copyright>Copyright © 2016 Tim Rawlinson</copyright>
+    <tags>Since.Versioning</tags>
   </metadata>
-  <!-- The convention for analyzers is to put language agnostic dlls in analyzers\portable50 and language specific analyzers in either analyzers\portable50\cs or analyzers\portable50\vb -->
   <files>
-    <!--<file src="bin\Release\*.dll" target="lib\net46" exclude="**\Microsoft.CodeAnalysis.*;**\System.Collections.Immutable.*;**\System.Reflection.Metadata.*;**\System.Composition.*" />
-    <file src="bin\Release\*.pdb" target="lib\net46" exclude="**\Microsoft.CodeAnalysis.*;**\System.Collections.Immutable.*;**\System.Reflection.Metadata.*;**\System.Composition.*" />
-  -->
+    <file src="Build\**\*" target="build/" />
+    <file src="Content\**\*" target="content/net452/" />
+    <file src="bin\release\Since.Versioning.dll" target="tools/net452/" />
+    <file src="..\..\packages\LibGit2Sharp.NativeBinaries.1.0.129\libgit2\windows\**\*.dll" target="tools/native/NativeBinaries" />    
+    <file src="Tools\*.*" target="tools/" />
   </files>
 </package>
