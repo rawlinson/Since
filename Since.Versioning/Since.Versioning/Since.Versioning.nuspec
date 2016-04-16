@@ -3,7 +3,7 @@
   <metadata>
     <id>Since.Versioning</id>
     <version>0.0.0.0</version>
-    <title>Since Versioning 1</title>
+    <title>Since Versioning</title>
     <authors>Tim Rawlinson</authors>
     <owners>Tim Rawlinson</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,10 +12,11 @@
     <tags>Since.Versioning</tags>
   </metadata>
   <files>
-    <file src="Build\**\*" target="build/" />
-    <file src="Content\**\*" target="content/net452/" />
-    <file src="bin\release\Since.Versioning.dll" target="tools/net452/" />
-    <file src="..\..\packages\LibGit2Sharp.NativeBinaries.1.0.129\libgit2\windows\**\*.dll" target="tools/native/NativeBinaries" />    
+    <file src="Build\*.*" target="build/" />
+    <file src="Content\**\*.*" target="content/net46/" />
+    <file src="bin\release\Since*.dll" target="tools/net46/" />
+    <file src="bin\release\LibGit2Sharp.dll" target="tools/net46/" />
+    <file src="..\..\packages\LibGit2Sharp.NativeBinaries.1.0.129\libgit2\windows\**\*.dll" target="tools/net46/NativeBinaries" />    
     <file src="Tools\*.*" target="tools/" />
   </files>
 </package>

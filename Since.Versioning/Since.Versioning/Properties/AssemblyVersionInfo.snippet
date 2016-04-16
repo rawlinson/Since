@@ -1,0 +1,9 @@
+﻿
+version = new Since.Version(0, 4, 3, Git.Revision);
+
+version.TagString = Git.BranchName;
+version.PreString = "alpha.1";
+version.PostString = Join("dev", Git.Revision, Git.ModifiedString ?? "");
+version.BuildString = Join("git", Git.CommitIdShort);
+
+published = true;//Git.BranchMatches("^refs/tags/v\\d\\.\\d");

@@ -1,10 +1,11 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using LibGit2Sharp;
 
-namespace Since.Versioning
+namespace Since.Tasks
 {
     public class Git
     {
@@ -22,6 +23,23 @@ namespace Since.Versioning
 
         public Branch Branch
             => this.Repository?.Head;
+
+        private int _revision = -1;
+        public int Revision
+            => _revision == -1 ? (_revision = this.GetRevision()) : _revision;
+
+        // Get the number of minutes since the last commit of the version file
+        //  and the most recent change to the repository. Ish.
+        public int GetRevision()
+        {
+            DateTime start = this.LastVersionCommit.Author.When.DateTime.ToUniversalTime();
+
+            DateTime stop = this.IsModified
+                ? DateTime.UtcNow
+                : this.Commit.Author.When.DateTime.ToUniversalTime();
+
+            return (int)stop.Subtract(start).TotalMinutes;
+        }
 
         public string BranchName
         {
@@ -87,7 +105,7 @@ namespace Since.Versioning
             while (!Directory.Exists(Path.Combine(path, ".git")))
             {
                 path = Path.GetDirectoryName(path);
-                if (path == null)
+                if (string.IsNullOrEmpty(path))
                     return null;
             }
 

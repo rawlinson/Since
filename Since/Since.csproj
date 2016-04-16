@@ -116,18 +116,11 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="project.json" />
     <None Include="Since.snk" />
-    <None Include="Properties\AssemblyVersionInfo.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>AssemblyVersionInfo.cs</LastGenOutput>
-    </None>
+    <None Include="Properties\AssemblyVersionInfo.tt" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\BooleanExtensions.cs" />
-    <Compile Include="Properties\AssemblyVersionInfo.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AssemblyVersionInfo.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Extensions\LazyExtensions.cs" />
     <Compile Include="AutoBool.cs" />
     <Compile Include="Collections\BiDictionary.cs" />
     <Compile Include="Collections\HashSet.cs" />
@@ -142,6 +135,7 @@
     <Compile Include="Text\CompoundWordCase.cs" />
     <Compile Include="Text\InternedString.cs" />
     <Compile Include="Text\InternedStringNode.cs" />
+    <Compile Include="Version.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

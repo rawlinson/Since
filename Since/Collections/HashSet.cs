@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.Contracts;
 
 namespace Since.Collections
@@ -247,7 +246,7 @@ namespace Since.Collections
         {
             if (_buckets == null)
                 this.InitializeCapacity(0);
-            Debug.Assert(_buckets != null);
+            Contract.Assert(_buckets != null);
 
             var hashCode = this.GetItemHashCode(item);
 

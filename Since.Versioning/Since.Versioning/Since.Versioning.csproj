@@ -9,13 +9,14 @@
     <ProjectGuid>{99EDFF86-DBE0-46EB-ABDD-38917DA879B7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Since.Versioning</RootNamespace>
+    <RootNamespace>Since</RootNamespace>
     <AssemblyName>Since.Versioning</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
     <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,42 +46,46 @@
   <PropertyGroup>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Bootstrap|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Bootstrap\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;BOOTSTRAP</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Git.cs" />
+    <Compile Include="Tasks\Git.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AssemblyVersionInfoTemplate.cs" />
-    <Compile Include="Properties\AssemblyVersionInfo.cs">
-      <DependentUpon>AssemblyVersionInfo.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
+    <EmbeddedResource Include="Tasks\VersionGeneratorTemplate.cs" />
+    <Compile Include="Tasks\VersionGeneratorBase.cs" />
+    <Compile Include="Tasks\GenerateAssemblyVersionInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Since.Versioning.nuspec" />
+    <None Include="Since.Versioning.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="readme.md" />
     <None Include="project.json" />
     <None Include="Since.snk" />
-    <None Include="Tools\install.ps1">
-      <SubType>Component</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\Properties\AssemblyVersionInfo.tt" />
-    <Content Include="Build\Since.Versioning.targets" />
+    <None Include="Content\Properties\AssemblyVersionInfo.snippet" />
+    <Content Include="Build\Since.Versioning.targets">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="envdte, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.TextTemplating.14.0, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\VSSDK\VisualStudioIntegration\Common\Assemblies\v4.0\Microsoft.VisualStudio.TextTemplating.14.0.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.TextTemplating.Interfaces.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="Build\Since.Versioning.targets" />
+  <!--<Import Project="Build\Since.Versioning.targets" />-->
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
@@ -88,19 +93,39 @@
     <Error Condition="!Exists('..\..\packages\LibGit2Sharp.NativeBinaries.1.0.129\build\LibGit2Sharp.NativeBinaries.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\LibGit2Sharp.NativeBinaries.1.0.129\build\LibGit2Sharp.NativeBinaries.props'))" />
   </Target>
   <ItemGroup>
-    <None Include="Properties\AssemblyVersionInfo.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Since\Since.csproj">
+      <Project>{1668bbc9-294a-46b7-915e-0c532e5e7e9d}</Project>
+      <Name>Since</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <UsingTask TaskName="Since.Tasks.GenerateAssemblyVersionInfo" AssemblyFile="bin/Bootstrap/Since.Versioning.dll" />
+  <Target Name="BeforeBuild" Condition=" '$(Configuration)' != 'Bootstrap' ">
+    <GenerateAssemblyVersionInfo InputPath="Properties/AssemblyVersionInfo.snippet" />
+  </Target>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyVersionInfo.cs" Condition=" '$(Configuration)' != 'Bootstrap' ">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AssemblyVersionInfo.snippet</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\AssemblyVersionInfo.snippet">
       <LastGenOutput>AssemblyVersionInfo.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <Folder Include="Tools\" />
   </ItemGroup>
   <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
     <GetAssemblyIdentity AssemblyFiles="bin\Release\Since.Versioning.dll">
-      <Output TaskParameter="Assemblies" ItemName="AssemblyInfo"/>
+      <Output TaskParameter="Assemblies" ItemName="AssemblyInfo" />
     </GetAssemblyIdentity>
-    <Exec Command="nuget pack Since.Versioning.nuspec -Prop Configuration=Release -Version %(AssemblyInfo.Version)"></Exec>
+    <Exec Command="nuget.exe pack Since.Versioning.nuspec -Prop Configuration=Release -Version %(AssemblyInfo.Version)">
+    </Exec>
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
